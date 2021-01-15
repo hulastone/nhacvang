@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	log "github.com/Sirupsen/logrus"
+	//log "github.com/Sirupsen/logrus"
 )
 
 func SetDebug() {
@@ -75,7 +75,7 @@ func Search(query string) ([]Video, error) {
 		// id
 		id := vr.VideoID
 		if id == "" {
-			log.Debugf("failed to find VideoID in ytdata")
+			//log.Debugf("failed to find VideoID in ytdata")
 			continue
 		}
 
@@ -104,11 +104,11 @@ func Search(query string) ([]Video, error) {
 			return int64(d.Seconds()), nil
 		}()
 		if err != nil {
-			log.Debug(err)
+			//log.Debug(err)
 			continue
 		}
 		if title == "" {
-			log.Debugf("failed to find Length in ytdata")
+			//log.Debugf("failed to find Length in ytdata")
 			continue
 		}
 
