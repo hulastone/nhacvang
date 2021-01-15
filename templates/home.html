@@ -2,10 +2,6 @@
 
 <div class="ui container">
     <div class="ui hidden clearing divider"></div>
-    <a class="ui right floated large green button" href="/soundscape/create"><i class="plus icon"></i>New Playlist</a>
-    <h2 class="ui header">Playlists</h2>
-
-    <div class="ui hidden divider"></div>
 
     {{if $.Lists}}
         <div class="ui stackable three column grid">
@@ -26,7 +22,7 @@
                         </a>
                         <div class="extra content">
                             <div class="meta">
-                                <a class="right floated meta" href="/soundscape/edit/{{$list.ID}}"><i class="setting icon"></i> Edit</a>
+                                
                             </div>
                             <div class="category">
                                 {{if $mediacount}}
