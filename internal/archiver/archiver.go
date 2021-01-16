@@ -224,7 +224,7 @@ func (a *Archiver) archive(job *Job) {
 		a.unlock("archive complete")
 	}()
 
-	vinfo, err := ytdl.GetVideoInfoFromID(job.id)
+	vinfo, err := ytdl.DefaultClient.GetVideoInfoFromID(*job.context, job.id)
 	if err != nil {
 		failed = err
 		return
@@ -242,7 +242,8 @@ func (a *Archiver) archive(job *Job) {
 	}
 
 	// video
-	videourl, err := vinfo.GetDownloadURL(vinfo.Formats[0])
+	videourl, err := ytdl.DefaultClient.GetDownloadURL(*job.context, vinfo, vinfo.Formats[0])
+	// vinfo.GetDownloadURL(vinfo.Formats[0])
 	if err != nil {
 		failed = err
 		return
