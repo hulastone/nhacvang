@@ -7,7 +7,6 @@ import (
 	"html/template"
 	"net"
 	"net/http"
-	"strings"
 	"time"
 
 	humanize "github.com/dustin/go-humanize"
@@ -177,28 +176,29 @@ func JSON(w http.ResponseWriter, data interface{}) {
 func HTML(w http.ResponseWriter, target string, data interface{}) {
 	t := template.New(target)
 	t.Funcs(funcMap)
-	for _, filename := range AssetNames() {
-		if !strings.HasPrefix(filename, "templates/") {
-			continue
-		}
-		name := strings.TrimPrefix(filename, "templates/")
-		b, err := Asset(filename)
-		if err != nil {
-			Error(w, err)
-			return
-		}
+	/*
+		for _, filename := range AssetNames() {
+			if !strings.HasPrefix(filename, "templates/") {
+				continue
+			}
+			name := strings.TrimPrefix(filename, "templates/")
+			b, err := Asset(filename)
+			if err != nil {
+				Error(w, err)
+				return
+			}
 
-		var tmpl *template.Template
-		if name == t.Name() {
-			tmpl = t
-		} else {
-			tmpl = t.New(name)
-		}
-		if _, err := tmpl.Parse(string(b)); err != nil {
-			Error(w, err)
-			return
-		}
-	}
+			var tmpl *template.Template
+			if name == t.Name() {
+				tmpl = t
+			} else {
+				tmpl = t.New(name)
+			}
+			if _, err := tmpl.Parse(string(b)); err != nil {
+				Error(w, err)
+				return
+			}
+		}*/
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if err := t.Execute(w, data); err != nil {
