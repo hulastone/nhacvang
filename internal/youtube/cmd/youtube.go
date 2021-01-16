@@ -1,18 +1,20 @@
 package main
 
 import (
-	"os"
 	"fmt"
-	"github.com/soundscapecloud/soundscape/internal/youtube"
+	"os"
+
+	"../../youtube"
 )
 
 func main() {
-    youtube.SetDebug()
+	//youtube.SetDebug()
 
+	//fmt.Println("ok" + os.Args[1])
 	videos, err := youtube.Search(os.Args[1])
 	if err != nil {
-        fmt.Println(err)
-        os.Exit(1)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	for _, v := range videos {

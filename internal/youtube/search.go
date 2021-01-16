@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	//log "github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 )
 
 func SetDebug() {
@@ -17,10 +19,12 @@ func SetDebug() {
 }
 
 func Search(query string) ([]Video, error) {
+
 	u, err := url.Parse("https://www.youtube.com/results")
 	if err != nil {
 		return nil, err
 	}
+
 	q := &url.Values{}
 	q.Add("search_query", query)
 	u.RawQuery = q.Encode()
@@ -36,23 +40,48 @@ func Search(query string) ([]Video, error) {
 		return nil, err
 	}
 
-	ytdataPattern := regexp.MustCompile(`window\["ytInitialData"\]\s*=\s*(?P<ydata>\{.*?\})\s*;\s*\n`)
+	ytdataPattern := regexp.MustCompile(`["ytInitialData"]\s*=\s*(\{.*?\})\s*;`)
 
 	var ytd *ytdata
 	var finderr error
-	doc.Find("script").Each(func(i int, s *goquery.Selection) {
-		matches := ytdataPattern.FindStringSubmatch(s.Text())
-		if len(matches) < 2 {
-			return
-		}
-		match := matches[1]
 
-		y := ytdata{}
-		if err := json.Unmarshal([]byte(match), &y); err != nil {
-			finderr = fmt.Errorf("failed to extract ytdata: %s", err)
-			return
+	var temp int = 0
+
+	doc.Find("script").Each(func(i int, s *goquery.Selection) {
+
+		temp++
+		if strings.Contains(s.Text(), "var ytInitialData") {
+
+			//fmt.Println("hello world" + s.Text())
+			matches := ytdataPattern.FindStringSubmatch(s.Text())
+			if len(matches) < 2 {
+				return
+			}
+			match := matches[1]
+
+			var str string = "test" + strconv.Itoa(temp) + ".txt"
+			f, err := os.Create(str)
+			if err != nil {
+				fmt.Println(err)
+			}
+			l, err := f.WriteString(matches[1])
+			if err != nil {
+				fmt.Println(err)
+				f.Close()
+			}
+			fmt.Println(l, "bytes written successfully")
+
+			//fmt.Println("hello world" + matches[1])
+
+			y := ytdata{}
+			if err := json.Unmarshal([]byte(match), &y); err != nil {
+				finderr = fmt.Errorf("failed to extract ytdata: %s", err)
+				return
+			}
+			ytd = &y
+
 		}
-		ytd = &y
+
 	})
 	if finderr != nil {
 		return nil, finderr
@@ -80,7 +109,7 @@ func Search(query string) ([]Video, error) {
 		}
 
 		// title
-		title := vr.Title.SimpleText
+		title := vr.Title.Runs[0].Text
 		if title == "" {
 			return nil, fmt.Errorf("failed to find Title in ytdata")
 		}
@@ -122,5 +151,6 @@ func Search(query string) ([]Video, error) {
 			Length:    length,
 		})
 	}
+
 	return videos, nil
 }

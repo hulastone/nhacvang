@@ -144,12 +144,9 @@ type ytdata struct {
 										} `json:"webThumbnailDetailsExtensionData"`
 									} `json:"thumbnail"`
 									Title struct {
-										Accessibility struct {
-											AccessibilityData struct {
-												Label string `json:"label"`
-											} `json:"accessibilityData"`
-										} `json:"accessibility"`
-										SimpleText string `json:"simpleText"`
+										Runs []struct {
+											Text string `json:"text"`
+										} `json:"runs"`
 									} `json:"title"`
 									DescriptionSnippet struct {
 										Runs []struct {

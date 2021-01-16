@@ -78,14 +78,14 @@ func (v Video) Download(ctx context.Context, dir string) error {
 	// pick first stream (seems to always be best one)
 	//stream := v.Streams[0]
 
-	vi, err := ytdl.GetVideoInfoFromID(v.ID)
+	vi, err := ytdl.DefaultClient.GetVideoInfoFromID(ctx, v.ID)
 	if err != nil {
 		return err
 	}
 
 	format := vi.Formats[0]
 	//for _, f := range vi.Formats { log.Printf("availabe format is %+v", f) }
-	dlurl, err := vi.GetDownloadURL(format)
+	dlurl, err := ytdl.DefaultClient.GetDownloadURL(ctx, vi, format)
 	if err != nil {
 		return err
 	}
