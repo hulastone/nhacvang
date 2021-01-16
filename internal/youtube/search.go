@@ -11,11 +11,11 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	log "github.com/Sirupsen/logrus"
+	//log "github.com/Sirupsen/logrus"
 )
 
 func SetDebug() {
-	log.SetLevel(log.DebugLevel)
+	//log.SetLevel(log.DebugLevel)
 }
 
 func Search(query string) ([]Video, error) {
