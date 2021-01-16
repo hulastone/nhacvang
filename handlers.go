@@ -341,7 +341,7 @@ func archiverSave(w http.ResponseWriter, r *http.Request, ps httprouter.Params) 
 		return
 	}
 
-	media, err := NewMedia(vinfo.ID, vinfo.Author, vinfo.Title, int64(vinfo.Duration.Seconds()), source)
+	media, err := NewMedia(vinfo.ID, vinfo.Artist, vinfo.Title, int64(vinfo.Duration.Seconds()), source)
 	if err != nil {
 		Error(w, err)
 		return
