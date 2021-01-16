@@ -30,7 +30,7 @@ COPY templates ./templates
 
 RUN go fmt && \
     go vet --all && \
-    go generate ./static \
+    go generate ./templates \
     go-bindata --pkg main static/... templates/...
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
