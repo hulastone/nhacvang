@@ -335,7 +335,7 @@ func archiverSave(w http.ResponseWriter, r *http.Request, ps httprouter.Params) 
 	id := ps.ByName("id")
 	source := fmt.Sprintf("https://www.youtube.com/v?id=%s", id)
 
-	vinfo, err := ytdl.DefaultClient.GetVideoInfoFromID(r.Context(), w.id)
+	vinfo, err := ytdl.DefaultClient.GetVideoInfoFromID(r.Context(), id)
 	if err != nil {
 		Error(w, err)
 		return
