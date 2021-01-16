@@ -30,7 +30,7 @@ COPY templates ./templates
 
 RUN go fmt && \
     go vet --all && \
-    go-bindata --pkg main static/... templates/...
+    go-bindata --pkg main -o=main/bindata.go static/... templates/...
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
     go build -v --compiler gc --ldflags "-extldflags -static -s -w -X main.version=${BUILD_VERSION}" -o /usr/bin/soundscape-linux-amd64
