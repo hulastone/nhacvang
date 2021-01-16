@@ -22,6 +22,7 @@ RUN go get \
     go.uber.org/zap \
     golang.org/x/crypto/acme/autocert
 
+
 COPY *.go ./
 COPY internal ./internal
 COPY static ./static
@@ -29,6 +30,7 @@ COPY templates ./templates
 
 RUN go fmt && \
     go vet --all && \
+    go generate ./static \
     go-bindata --pkg main static/... templates/...
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
